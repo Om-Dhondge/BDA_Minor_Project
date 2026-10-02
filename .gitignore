@@ -1,0 +1,19 @@
+# Data - never commit, tens of GB
+dataset/data/
+dataset/Datasets_1st run/
+dataset/Datasets_2nd run/
+graph/out/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Spark
+spark-warehouse/
+metastore_db/
+derby.log
+
+# IDE
+.vscode/

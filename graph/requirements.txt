@@ -1,0 +1,10 @@
+# Requires Python 3.11. PySpark 3.5.3 does not support 3.12: its bundled
+# cloudpickle 2.2.1 predates 3.12 and the executor's Python worker dies
+# without a traceback ("Python worker exited unexpectedly (crashed)").
+pyspark==3.5.3
+pyarrow>=17.0.0
+# Capped below 3.0: PySpark 3.5.3 predates pandas 3.0 and is tested against 2.x.
+pandas>=2.2.0,<3.0
+streamlit>=1.38.0
+plotly>=5.24.0
+pytest>=8.3.0
