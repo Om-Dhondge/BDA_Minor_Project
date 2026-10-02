@@ -58,14 +58,21 @@ def _ensure_java_home():
 
 
 def _ensure_hadoop_home():
-    """Point HADOOP_HOME at the winutils install if the caller has not."""
-    if os.environ.get("HADOOP_HOME"):
-        return
-    if (DEFAULT_HADOOP_HOME / "bin" / "winutils.exe").exists():
+    """Point HADOOP_HOME at the winutils install, and put its bin on PATH.
+
+    The JVM loads hadoop.dll from PATH, not from HADOOP_HOME. A shell that
+    inherits HADOOP_HOME from user scope still lacks its bin on PATH, and
+    GraphFrames' Connected Components then dies with UnsatisfiedLinkError on
+    NativeIO$Windows.access0. So PATH is fixed up even when HADOOP_HOME is set.
+    """
+    if not os.environ.get("HADOOP_HOME"):
+        if not (DEFAULT_HADOOP_HOME / "bin" / "winutils.exe").exists():
+            return
         os.environ["HADOOP_HOME"] = str(DEFAULT_HADOOP_HOME)
-        os.environ["PATH"] = (
-            f"{DEFAULT_HADOOP_HOME / 'bin'}{os.pathsep}{os.environ.get('PATH', '')}"
-        )
+    hadoop_bin = str(Path(os.environ["HADOOP_HOME"]) / "bin")
+    path = os.environ.get("PATH", "")
+    if hadoop_bin.lower() not in path.lower().split(os.pathsep):
+        os.environ["PATH"] = f"{hadoop_bin}{os.pathsep}{path}"
 
 
 def _ensure_python_workers():
