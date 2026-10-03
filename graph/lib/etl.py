@@ -51,3 +51,16 @@ def build_tag_attributes(edges: DataFrame, questions: DataFrame) -> DataFrame:
             F.avg("mean_answer_score").alias("mean_answer_score"),
         )
     )
+
+
+def sample_questions(posts: DataFrame, pct: int) -> DataFrame:
+    """Keep pct% of questions, with every answer row of each kept question.
+
+    Hashing question_id instead of calling .sample() makes the subset
+    identical across processes and runs, and nests the scales: the 10% subset
+    sits inside the 25% one. Sampling rows instead of questions would drop
+    some answers of a kept question and understate answer_count.
+    """
+    if not 0 < pct <= 100:
+        raise ValueError(f"pct must be in (0, 100], got {pct}")
+    return posts.filter(F.pmod(F.xxhash64("question_id"), F.lit(100)) < pct)

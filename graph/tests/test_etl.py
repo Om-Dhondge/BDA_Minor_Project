@@ -1,7 +1,10 @@
+import pytest
+
 from lib.etl import (
     aggregate_questions,
     build_tag_attributes,
     explode_question_tags,
+    sample_questions,
 )
 
 
@@ -60,3 +63,38 @@ def test_tag_attributes_average_across_questions(posts):
     assert rows["python"]["mean_answers_per_question"] == 2.5
     # java appears only on q2
     assert rows["java"]["mean_question_score"] == 4.0
+
+
+@pytest.fixture
+def many_posts(spark):
+    """200 questions with two answer rows each."""
+    rows = [(q, ["t"], 1, a) for q in range(200) for a in (1, 2)]
+    return spark.createDataFrame(rows, ["question_id", "tags", "score", "answer_score"])
+
+
+def test_sample_100_keeps_every_row(many_posts):
+    assert sample_questions(many_posts, 100).count() == 400
+
+
+def test_sample_keeps_whole_questions(many_posts):
+    counts = sample_questions(many_posts, 25).groupBy("question_id").count().collect()
+    assert counts
+    assert all(r["count"] == 2 for r in counts)
+
+
+def test_sample_is_deterministic(many_posts):
+    first = {r["question_id"] for r in sample_questions(many_posts, 25).collect()}
+    second = {r["question_id"] for r in sample_questions(many_posts, 25).collect()}
+    assert first == second
+
+
+def test_smaller_samples_nest_inside_larger_ones(many_posts):
+    small = {r["question_id"] for r in sample_questions(many_posts, 10).collect()}
+    large = {r["question_id"] for r in sample_questions(many_posts, 50).collect()}
+    assert small <= large
+    assert len(small) < len(large)
+
+
+def test_sample_rejects_out_of_range_percent(many_posts):
+    with pytest.raises(ValueError):
+        sample_questions(many_posts, 0)
