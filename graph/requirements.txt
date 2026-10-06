@@ -2,6 +2,9 @@
 # cloudpickle 2.2.1 predates 3.12 and the executor's Python worker dies
 # without a traceback ("Python worker exited unexpectedly (crashed)").
 pyspark==3.5.3
+# Python wrapper only; the 0.8.4 JAR comes from spark.jars.packages in
+# lib/session.py. The 0.6 wrapper drives that JAR (verified in Task 1).
+graphframes==0.6
 pyarrow>=17.0.0
 # Capped below 3.0: PySpark 3.5.3 predates pandas 3.0 and is tested against 2.x.
 pandas>=2.2.0,<3.0
