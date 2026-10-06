@@ -33,8 +33,8 @@ st.caption(
 
 metrics = load_metrics()
 
-tab1, tab2, tab3, tab4 = st.tabs(
-    ["Tag authority", "Communities", "Co-occurrence", "Network"]
+tab1, tab2, tab3, tab4, tab5 = st.tabs(
+    ["Tag authority", "Communities", "Co-occurrence", "Network", "Benchmark"]
 )
 
 with tab1:
@@ -148,3 +148,60 @@ with tab4:
         table[["src", "dst", "weight", "src_community", "dst_community"]],
         use_container_width=True,
     )
+
+BENCH_STEPS = ["load", "connected_components", "pagerank",
+               "label_propagation", "triangle_count"]
+
+with tab5:
+    st.subheader("Spark vs NetworkX")
+    st.caption(
+        "Both engines run the same graphs at each scale. Spark runs in local "
+        "mode on one machine's 12 cores; NetworkX is single-threaded. The "
+        "projection is benchmarked unthresholded (weight >= 1)."
+    )
+    bench_path = OUT / "results" / "benchmark.csv"
+    if not bench_path.exists():
+        st.info("No benchmark results yet. Run `stage6_benchmark.py` first.")
+    else:
+        bench = pd.read_csv(bench_path)
+        graph = st.radio("Graph", ["projection", "bipartite"], horizontal=True)
+        timed = bench[
+            (bench["status"] == "ok")
+            & (bench["graph"] == graph)
+            & bench["step"].isin(BENCH_STEPS)
+        ]
+        medians = (timed.groupby(["engine", "scale_pct", "step"], as_index=False)
+                   ["seconds"].median())
+        if medians.empty:
+            st.warning("No completed runs for this graph yet.")
+        else:
+            st.plotly_chart(px.line(
+                medians, x="scale_pct", y="seconds", color="engine",
+                facet_col="step", markers=True, log_y=True,
+                category_orders={"step": [s for s in BENCH_STEPS
+                                          if s in set(medians["step"])]},
+                labels={"scale_pct": "% of questions", "seconds": "Seconds"},
+                title=f"Time by data scale, {graph} graph (median over repeats)",
+            ))
+
+        # Not `sizes`: tab 2's format_func closes over that module-level name,
+        # and Streamlit calls it again after the script finishes.
+        scale_sizes = bench[
+            (bench["engine"] == "spark") & (bench["graph"] == graph)
+            & (bench["step"] == "load") & (bench["status"] == "ok")
+        ].drop_duplicates("scale_pct").sort_values("scale_pct")
+        st.markdown("**Graph size at each scale**")
+        st.dataframe(scale_sizes[["scale_pct", "vertices", "edges"]],
+                     hide_index=True)
+
+        unfinished = bench[bench["status"] != "ok"]
+        if len(unfinished):
+            st.markdown("**Runs that did not finish.** A NetworkX timeout at "
+                        "full scale is a result, not a failure.")
+            st.dataframe(unfinished[["engine", "scale_pct", "graph", "step",
+                                     "status", "error"]], hide_index=True)
+
+        checks_path = OUT / "results" / "benchmark_checks.csv"
+        if checks_path.exists():
+            st.markdown("**Cross-engine checks**")
+            st.dataframe(pd.read_csv(checks_path), hide_index=True)
