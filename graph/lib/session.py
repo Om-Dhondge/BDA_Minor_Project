@@ -115,6 +115,11 @@ def build_session(app_name, scratch_root=None, driver_memory="8g"):
         .config("spark.jars.packages", GRAPHFRAMES_PACKAGE)
         .config("spark.local.dir", str(local_dir))
         .config("spark.driver.memory", driver_memory)
+        # Loopback, not the hostname: the hostname resolves to the Wi-Fi
+        # address, and a network switch mid-run leaves the driver unable to
+        # reach its own block manager (TaskResultLost).
+        .config("spark.driver.host", "127.0.0.1")
+        .config("spark.driver.bindAddress", "127.0.0.1")
         .config("spark.sql.shuffle.partitions", "48")
         .getOrCreate()
     )

@@ -20,3 +20,14 @@ def test_preset_hadoop_home_still_puts_its_bin_on_path(tmp_path, monkeypatch):
     _ensure_hadoop_home()
 
     assert str(hadoop_bin) in os.environ["PATH"].split(os.pathsep)
+
+
+def test_session_binds_to_loopback(spark):
+    """Local mode must not depend on the machine's network address.
+
+    Spark otherwise advertises the Wi-Fi address it found at startup. When the
+    laptop switched networks mid-run, the driver could no longer reach its own
+    block manager and Connected Components died with TaskResultLost.
+    """
+    assert spark.conf.get("spark.driver.host") == "127.0.0.1"
+    assert spark.conf.get("spark.driver.bindAddress") == "127.0.0.1"

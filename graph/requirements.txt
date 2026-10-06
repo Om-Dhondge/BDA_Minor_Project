@@ -10,3 +10,7 @@ plotly>=5.24.0
 pytest>=8.3.0
 # Stage 5 query runner. Driver 5.x pairs with the 5.26 LTS server.
 neo4j>=5.28,<6
+# Stage 6 benchmark baseline. networkx 3.7+ requires Python 3.12.
+networkx>=3.4,<3.7
+scipy>=1.13   # nx.pagerank runs its power iteration on scipy.sparse
+psutil>=6.0   # NetworkX peak working-set memory

@@ -47,6 +47,24 @@ def append_record(path, record):
         f.write(line + "\n")
 
 
+def read_parquet_frame(path):
+    """A Parquet file, or a Spark-written directory of part files, as pandas.
+
+    pd.read_parquet on a directory goes through pyarrow.dataset, which loads
+    pyarrow's unsigned _json extension. Smart App Control blocks that file
+    intermittently on this machine, and pyarrow then reports a misleading
+    ValueError about directories. ParquetFile reads one file without it.
+    """
+    import pyarrow as pa
+    import pyarrow.parquet as pq
+
+    path = Path(path)
+    files = sorted(path.glob("*.parquet")) if path.is_dir() else [path]
+    if not files:
+        raise FileNotFoundError(f"no Parquet part files in {path}")
+    return pa.concat_tables([pq.ParquetFile(f).read() for f in files]).to_pandas()
+
+
 def read_records(path):
     """Every record in the log, oldest first. A missing log reads as empty."""
     path = Path(path)
@@ -68,10 +86,24 @@ def run_step(record, step, graph, fn):
         fields = fn() or {}
         status, error = "ok", None
     except Exception as exc:  # recorded in the results, not swallowed
-        fields, status, error = {}, "error", f"{type(exc).__name__}: {exc}"[:500]
+        fields, status, error = {}, "error", describe_error(exc)[:500]
     record(step=step, graph=graph, status=status, error=error,
            seconds=round(time.perf_counter() - start, 3), **fields)
     return status == "ok"
+
+
+def describe_error(exc):
+    """The exception and the ones it was raised from or while handling.
+
+    Libraries re-raise low-level failures as generic ones: pyarrow turns a
+    failed `import pyarrow.dataset` into a ValueError about directories. The
+    chained exception is the one that says why.
+    """
+    parts = []
+    while exc is not None and len(parts) < 3:
+        parts.append(f"{type(exc).__name__}: {exc}")
+        exc = exc.__cause__ or exc.__context__
+    return " <- ".join(parts)
 
 
 def mark_unfinished(path, base, graph, limit_seconds):
