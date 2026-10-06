@@ -17,3 +17,6 @@ derby.log
 
 # IDE
 .vscode/
+
+# Planning docs (design spec, implementation plan) - kept locally only
+docs/superpowers/
