@@ -1,0 +1,19 @@
+# Requires Python 3.11. PySpark 3.5.3 does not support 3.12: its bundled
+# cloudpickle 2.2.1 predates 3.12 and the executor's Python worker dies
+# without a traceback ("Python worker exited unexpectedly (crashed)").
+pyspark==3.5.3
+# Python wrapper only; the 0.8.4 JAR comes from spark.jars.packages in
+# lib/session.py. The 0.6 wrapper drives that JAR (verified in Task 1).
+graphframes==0.6
+pyarrow>=17.0.0
+# Capped below 3.0: PySpark 3.5.3 predates pandas 3.0 and is tested against 2.x.
+pandas>=2.2.0,<3.0
+streamlit>=1.38.0
+plotly>=5.24.0
+pytest>=8.3.0
+# Stage 5 query runner. Driver 5.x pairs with the 5.26 LTS server.
+neo4j>=5.28,<6
+# Stage 6 benchmark baseline. networkx 3.7+ requires Python 3.12.
+networkx>=3.4,<3.7
+scipy>=1.13   # nx.pagerank runs its power iteration on scipy.sparse
+psutil>=6.0   # NetworkX peak working-set memory
