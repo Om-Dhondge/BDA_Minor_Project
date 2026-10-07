@@ -1,0 +1,184 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="560" viewBox="0 0 960 560" role="img" aria-labelledby="t d" font-family="system-ui, -apple-system, Segoe UI, sans-serif">
+<title id="t">Spark vs NetworkX: seconds per step against data scale</title>
+<desc id="d">Small multiples, log scale. NetworkX is faster than Spark on every algorithm step at every scale; load times are comparable. Values are in the README table.</desc>
+<rect width="960" height="560" rx="8" fill="#fcfcfb"/>
+<text x="16" y="32" font-size="17" font-weight="600" fill="#0b0b0b">Seconds per step against data scale</text>
+<text x="16" y="54" font-size="13" fill="#52514e">Same graphs on both engines; one run per step and scale; log scale. x: % of questions sampled.</text>
+<line x1="16" y1="78" x2="38" y2="78" stroke="#2a78d6" stroke-width="2" stroke-linecap="round"/>
+<circle cx="27" cy="78" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<text x="46" y="82.5" font-size="13" fill="#0b0b0b">Spark (local mode, 12 cores)</text>
+<line x1="298" y1="78" x2="320" y2="78" stroke="#eb6834" stroke-width="2" stroke-linecap="round"/>
+<circle cx="309" cy="78" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<text x="328" y="82.5" font-size="13" fill="#0b0b0b">NetworkX (single thread)</text>
+<text x="56.0" y="118" font-size="12.5" font-weight="600" fill="#52514e">Projection · load</text>
+<line x1="56.0" y1="276.0" x2="264.5" y2="276.0" stroke="#c3c2b7" stroke-width="1"/>
+<text x="50.0" y="280.0" font-size="11" text-anchor="end" fill="#898781">0.1 s</text>
+<line x1="56.0" y1="238.5" x2="264.5" y2="238.5" stroke="#e1e0d9" stroke-width="1"/>
+<text x="50.0" y="242.5" font-size="11" text-anchor="end" fill="#898781">1 s</text>
+<line x1="56.0" y1="201.0" x2="264.5" y2="201.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="50.0" y="205.0" font-size="11" text-anchor="end" fill="#898781">10 s</text>
+<line x1="56.0" y1="163.5" x2="264.5" y2="163.5" stroke="#e1e0d9" stroke-width="1"/>
+<text x="50.0" y="167.5" font-size="11" text-anchor="end" fill="#898781">100 s</text>
+<line x1="56.0" y1="126.0" x2="264.5" y2="126.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="50.0" y="130.0" font-size="11" text-anchor="end" fill="#898781">1,000 s</text>
+<text x="64.0" y="292" font-size="11" text-anchor="middle" fill="#898781">10%</text>
+<text x="89.8" y="292" font-size="11" text-anchor="middle" fill="#898781">25%</text>
+<text x="132.7" y="292" font-size="11" text-anchor="middle" fill="#898781">50%</text>
+<text x="218.5" y="292" font-size="11" text-anchor="middle" fill="#898781">100%</text>
+<polyline points="64.0,200.1 89.8,201.3 132.7,200.7 218.5,197.4" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="64.0" cy="200.1" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="89.8" cy="201.3" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="132.7" cy="200.7" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="218.5" cy="197.4" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<polyline points="64.0,250.7 89.8,242.1 132.7,232.7 218.5,225.1" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="64.0" cy="250.7" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="89.8" cy="242.1" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="132.7" cy="232.7" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="218.5" cy="225.1" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<text x="226.5" y="201.4" font-size="11.5" fill="#52514e">12.5 s</text>
+<text x="226.5" y="229.1" font-size="11.5" fill="#52514e">2.3 s</text>
+<text x="282.5" y="118" font-size="12.5" font-weight="600" fill="#52514e">Projection · connected components</text>
+<line x1="282.5" y1="276.0" x2="491.0" y2="276.0" stroke="#c3c2b7" stroke-width="1"/>
+<line x1="282.5" y1="238.5" x2="491.0" y2="238.5" stroke="#e1e0d9" stroke-width="1"/>
+<line x1="282.5" y1="201.0" x2="491.0" y2="201.0" stroke="#e1e0d9" stroke-width="1"/>
+<line x1="282.5" y1="163.5" x2="491.0" y2="163.5" stroke="#e1e0d9" stroke-width="1"/>
+<line x1="282.5" y1="126.0" x2="491.0" y2="126.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="290.5" y="292" font-size="11" text-anchor="middle" fill="#898781">10%</text>
+<text x="316.2" y="292" font-size="11" text-anchor="middle" fill="#898781">25%</text>
+<text x="359.2" y="292" font-size="11" text-anchor="middle" fill="#898781">50%</text>
+<text x="445.0" y="292" font-size="11" text-anchor="middle" fill="#898781">100%</text>
+<polyline points="290.5,152.0 316.2,152.4 359.2,152.7 445.0,152.0" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="290.5" cy="152.0" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="316.2" cy="152.4" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="359.2" cy="152.7" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="445.0" cy="152.0" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<polyline points="290.5,280.0 316.2,280.9 359.2,273.3 445.0,266.7" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="290.5" cy="280.0" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="316.2" cy="280.9" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="359.2" cy="273.3" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="445.0" cy="266.7" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<text x="453.0" y="156.0" font-size="11.5" fill="#52514e">203 s</text>
+<text x="453.0" y="270.7" font-size="11.5" fill="#52514e">0.2 s</text>
+<text x="509.0" y="118" font-size="12.5" font-weight="600" fill="#52514e">Projection · PageRank</text>
+<line x1="509.0" y1="276.0" x2="717.5" y2="276.0" stroke="#c3c2b7" stroke-width="1"/>
+<line x1="509.0" y1="238.5" x2="717.5" y2="238.5" stroke="#e1e0d9" stroke-width="1"/>
+<line x1="509.0" y1="201.0" x2="717.5" y2="201.0" stroke="#e1e0d9" stroke-width="1"/>
+<line x1="509.0" y1="163.5" x2="717.5" y2="163.5" stroke="#e1e0d9" stroke-width="1"/>
+<line x1="509.0" y1="126.0" x2="717.5" y2="126.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="517.0" y="292" font-size="11" text-anchor="middle" fill="#898781">10%</text>
+<text x="542.8" y="292" font-size="11" text-anchor="middle" fill="#898781">25%</text>
+<text x="585.7" y="292" font-size="11" text-anchor="middle" fill="#898781">50%</text>
+<text x="671.5" y="292" font-size="11" text-anchor="middle" fill="#898781">100%</text>
+<polyline points="517.0,146.8 542.8,146.8 585.7,146.2 671.5,145.7" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="517.0" cy="146.8" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="542.8" cy="146.8" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="585.7" cy="146.2" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="671.5" cy="145.7" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<polyline points="517.0,233.1 542.8,233.6 585.7,224.2 671.5,218.4" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="517.0" cy="233.1" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="542.8" cy="233.6" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="585.7" cy="224.2" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="671.5" cy="218.4" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<text x="679.5" y="149.7" font-size="11.5" fill="#52514e">298 s</text>
+<text x="679.5" y="222.4" font-size="11.5" fill="#52514e">3.4 s</text>
+<text x="735.5" y="118" font-size="12.5" font-weight="600" fill="#52514e">Projection · label propagation</text>
+<line x1="735.5" y1="276.0" x2="944.0" y2="276.0" stroke="#c3c2b7" stroke-width="1"/>
+<line x1="735.5" y1="238.5" x2="944.0" y2="238.5" stroke="#e1e0d9" stroke-width="1"/>
+<line x1="735.5" y1="201.0" x2="944.0" y2="201.0" stroke="#e1e0d9" stroke-width="1"/>
+<line x1="735.5" y1="163.5" x2="944.0" y2="163.5" stroke="#e1e0d9" stroke-width="1"/>
+<line x1="735.5" y1="126.0" x2="944.0" y2="126.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="743.5" y="292" font-size="11" text-anchor="middle" fill="#898781">10%</text>
+<text x="769.2" y="292" font-size="11" text-anchor="middle" fill="#898781">25%</text>
+<text x="812.2" y="292" font-size="11" text-anchor="middle" fill="#898781">50%</text>
+<text x="898.0" y="292" font-size="11" text-anchor="middle" fill="#898781">100%</text>
+<polyline points="743.5,153.5 769.2,151.8 812.2,150.0 898.0,145.3" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="743.5" cy="153.5" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="769.2" cy="151.8" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="812.2" cy="150.0" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="898.0" cy="145.3" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<polyline points="743.5,237.7 769.2,233.6 812.2,224.8 898.0,222.1" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="743.5" cy="237.7" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="769.2" cy="233.6" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="812.2" cy="224.8" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="898.0" cy="222.1" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<text x="906.0" y="149.3" font-size="11.5" fill="#52514e">306 s</text>
+<text x="906.0" y="226.1" font-size="11.5" fill="#52514e">2.7 s</text>
+<text x="56.0" y="328" font-size="12.5" font-weight="600" fill="#52514e">Projection · triangle count</text>
+<line x1="56.0" y1="486.0" x2="264.5" y2="486.0" stroke="#c3c2b7" stroke-width="1"/>
+<text x="50.0" y="490.0" font-size="11" text-anchor="end" fill="#898781">0.1 s</text>
+<line x1="56.0" y1="448.5" x2="264.5" y2="448.5" stroke="#e1e0d9" stroke-width="1"/>
+<text x="50.0" y="452.5" font-size="11" text-anchor="end" fill="#898781">1 s</text>
+<line x1="56.0" y1="411.0" x2="264.5" y2="411.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="50.0" y="415.0" font-size="11" text-anchor="end" fill="#898781">10 s</text>
+<line x1="56.0" y1="373.5" x2="264.5" y2="373.5" stroke="#e1e0d9" stroke-width="1"/>
+<text x="50.0" y="377.5" font-size="11" text-anchor="end" fill="#898781">100 s</text>
+<line x1="56.0" y1="336.0" x2="264.5" y2="336.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="50.0" y="340.0" font-size="11" text-anchor="end" fill="#898781">1,000 s</text>
+<text x="64.0" y="502" font-size="11" text-anchor="middle" fill="#898781">10%</text>
+<text x="89.8" y="502" font-size="11" text-anchor="middle" fill="#898781">25%</text>
+<text x="132.7" y="502" font-size="11" text-anchor="middle" fill="#898781">50%</text>
+<text x="218.5" y="502" font-size="11" text-anchor="middle" fill="#898781">100%</text>
+<polyline points="64.0,380.5 89.8,372.0 132.7,361.9 218.5,352.8" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="64.0" cy="380.5" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="89.8" cy="372.0" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="132.7" cy="361.9" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="218.5" cy="352.8" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<polyline points="64.0,448.2 89.8,432.4 132.7,420.2 218.5,408.4" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="64.0" cy="448.2" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="89.8" cy="432.4" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="132.7" cy="420.2" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="218.5" cy="408.4" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<text x="226.5" y="356.8" font-size="11.5" fill="#52514e">356 s</text>
+<text x="226.5" y="412.4" font-size="11.5" fill="#52514e">11.7 s</text>
+<text x="282.5" y="328" font-size="12.5" font-weight="600" fill="#52514e">Bipartite · load</text>
+<line x1="282.5" y1="486.0" x2="491.0" y2="486.0" stroke="#c3c2b7" stroke-width="1"/>
+<line x1="282.5" y1="448.5" x2="491.0" y2="448.5" stroke="#e1e0d9" stroke-width="1"/>
+<line x1="282.5" y1="411.0" x2="491.0" y2="411.0" stroke="#e1e0d9" stroke-width="1"/>
+<line x1="282.5" y1="373.5" x2="491.0" y2="373.5" stroke="#e1e0d9" stroke-width="1"/>
+<line x1="282.5" y1="336.0" x2="491.0" y2="336.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="290.5" y="502" font-size="11" text-anchor="middle" fill="#898781">10%</text>
+<text x="316.2" y="502" font-size="11" text-anchor="middle" fill="#898781">25%</text>
+<text x="359.2" y="502" font-size="11" text-anchor="middle" fill="#898781">50%</text>
+<text x="445.0" y="502" font-size="11" text-anchor="middle" fill="#898781">100%</text>
+<polyline points="290.5,414.8 316.2,408.5 359.2,408.9 445.0,403.4" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="290.5" cy="414.8" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="316.2" cy="408.5" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="359.2" cy="408.9" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="445.0" cy="403.4" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<polyline points="290.5,440.5 316.2,427.1 359.2,411.3 445.0,402.1" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="290.5" cy="440.5" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="316.2" cy="427.1" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="359.2" cy="411.3" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="445.0" cy="402.1" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<text x="509.0" y="328" font-size="12.5" font-weight="600" fill="#52514e">Bipartite · connected components</text>
+<line x1="509.0" y1="486.0" x2="717.5" y2="486.0" stroke="#c3c2b7" stroke-width="1"/>
+<line x1="509.0" y1="448.5" x2="717.5" y2="448.5" stroke="#e1e0d9" stroke-width="1"/>
+<line x1="509.0" y1="411.0" x2="717.5" y2="411.0" stroke="#e1e0d9" stroke-width="1"/>
+<line x1="509.0" y1="373.5" x2="717.5" y2="373.5" stroke="#e1e0d9" stroke-width="1"/>
+<line x1="509.0" y1="336.0" x2="717.5" y2="336.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="517.0" y="502" font-size="11" text-anchor="middle" fill="#898781">10%</text>
+<text x="542.8" y="502" font-size="11" text-anchor="middle" fill="#898781">25%</text>
+<text x="585.7" y="502" font-size="11" text-anchor="middle" fill="#898781">50%</text>
+<text x="671.5" y="502" font-size="11" text-anchor="middle" fill="#898781">100%</text>
+<polyline points="517.0,361.8 542.8,357.4 585.7,356.1 671.5,354.4" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="517.0" cy="361.8" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="542.8" cy="357.4" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="585.7" cy="356.1" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="671.5" cy="354.4" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<polyline points="517.0,464.1 542.8,451.1 585.7,435.5 671.5,426.5" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="517.0" cy="464.1" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="542.8" cy="451.1" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="585.7" cy="435.5" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="671.5" cy="426.5" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<text x="679.5" y="358.4" font-size="11.5" fill="#52514e">323 s</text>
+<text x="679.5" y="430.5" font-size="11.5" fill="#52514e">3.9 s</text>
+<text x="739.5" y="350" font-size="12.5" font-weight="600" fill="#52514e">How to read</text>
+<text x="739.5" y="369" font-size="12.5" fill="#898781">Each panel shares the same</text>
+<text x="739.5" y="388" font-size="12.5" fill="#898781">log scale, 0.1 s to 1,000 s.</text>
+<text x="739.5" y="407" font-size="12.5" fill="#898781">Labels give the 100% value</text>
+<text x="739.5" y="426" font-size="12.5" fill="#898781">where the lines are apart.</text>
+<text x="739.5" y="445" font-size="12.5" fill="#898781">From 10% to 100%, Spark's</text>
+<text x="739.5" y="464" font-size="12.5" fill="#898781">times grow 1.0–5.5×; most is</text>
+<text x="739.5" y="483" font-size="12.5" fill="#898781">fixed per-job overhead.</text>
+<text x="16" y="546" font-size="11.5" fill="#898781">Spark timings include Windows Defender real-time scanning of its scratch files (about 1.1–4× slower than a clean run).</text>
+</svg>
