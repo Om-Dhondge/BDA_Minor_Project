@@ -4,13 +4,21 @@ PageRank here is TAG AUTHORITY: the structural centrality of a technology.
 It is not an expert ranking; that requires OwnerUserId, which the current
 dataset does not carry.
 """
+import sys
 from pathlib import Path
 
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 import streamlit as st
 
+# `streamlit run` puts dashboard/ on sys.path, not graph/, so lib/ needs this.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from lib.bench import read_parquet_frame  # noqa: E402
+from lib.gephi import edge_segments, network_view, read_gephi_layout  # noqa: E402
+
 OUT = Path(__file__).resolve().parent.parent / "out"
+GEPHI = OUT / "gephi"
 
 st.set_page_config(page_title="Stack Overflow Tag Graph", layout="wide")
 
@@ -23,6 +31,18 @@ def load_metrics():
 @st.cache_data
 def load_edges():
     return pd.read_parquet(OUT / "edges_tag_tag.parquet")
+
+
+# Gephi's files are rewritten by hand. Each loader takes the file's mtime so a
+# fresh export replaces the cached copy without restarting the app.
+@st.cache_data
+def load_gephi_layout(path, modified):
+    return read_gephi_layout(path)
+
+
+@st.cache_data
+def load_louvain(path, modified):
+    return read_parquet_frame(path)
 
 
 st.title("Stack Overflow Technology Graph")
@@ -122,6 +142,75 @@ with tab3:
 
 with tab4:
     st.subheader("Network view")
+
+    # Names below stay distinct from tabs 1-3: tab 2's format_func reads the
+    # module-level `sizes` after the script finishes (see the tab 5 note).
+    gephi_image = GEPHI / "tag_graph.png"
+    if gephi_image.exists():
+        st.image(str(gephi_image), width="stretch", caption=(
+            "Gephi ForceAtlas2 layout of the tag graph at weight >= 5 "
+            "(25,597 tags). Colour: Louvain cluster. Size: tag authority."))
+    else:
+        st.info("No Gephi image yet. Run `stage7_gephi_export.py`, lay the graph "
+                "out in Gephi and export `out/gephi/tag_graph.png` "
+                "(plan Task 15, Part C).")
+
+    layout_path = GEPHI / "tag_graph_layout.gexf"
+    if not layout_path.exists():
+        st.info("No Gephi layout yet. Export `out/gephi/tag_graph_layout.gexf` "
+                "from Gephi with positions, colours and sizes "
+                "(plan Task 15, Part C).")
+    else:
+        layout = load_gephi_layout(str(layout_path), layout_path.stat().st_mtime)
+        gephi_n = st.slider("Tags in the layout view", 100, 5000, 1000,
+                            step=100, key="gephi_n")
+        gephi_k = st.slider("Strongest edges per tag", 1, 10, 3, key="gephi_k")
+        view_nodes, view_edges = network_view(layout, metrics, load_edges(),
+                                              gephi_n, gephi_k)
+        matched = int(layout["tag"].isin(metrics["tag"]).sum())
+        if view_nodes.empty:
+            st.warning(f"None of the {len(layout):,} tags in the Gephi layout "
+                       "match the current stage 3 output. Re-run stage 7 and "
+                       "redo the Gephi step.")
+        else:
+            louvain_path = GEPHI / "louvain_clusters.parquet"
+            if louvain_path.exists():
+                view_nodes = view_nodes.merge(
+                    load_louvain(str(louvain_path), louvain_path.stat().st_mtime),
+                    on="tag", how="left")
+            else:
+                view_nodes["louvain_cluster"] = None
+            hover = (
+                view_nodes["tag"]
+                + "<br>" + view_nodes["question_count"].map("{:,} questions".format)
+                + "<br>tag authority " + view_nodes["tag_authority"].map("{:.1f}".format)
+                + "<br>Louvain cluster " + view_nodes["louvain_cluster"].map(
+                    lambda c: "?" if pd.isna(c) else str(int(c)))
+            )
+            xs, ys = edge_segments(view_nodes, view_edges)
+            network = go.Figure([
+                go.Scattergl(x=xs, y=ys, mode="lines", hoverinfo="skip",
+                             line={"width": 0.5, "color": "rgba(140, 140, 140, 0.35)"}),
+                go.Scattergl(x=view_nodes["x"], y=view_nodes["y"], mode="markers",
+                             text=hover, hoverinfo="text",
+                             marker={"color": view_nodes["color"].fillna("#888888"),
+                                     "size": 2 * view_nodes["size"].fillna(4.0)
+                                     .clip(lower=1.0) ** 0.5,
+                                     "line": {"width": 0}}),
+            ])
+            network.update_layout(
+                showlegend=False, height=700,
+                margin={"l": 0, "r": 0, "t": 40, "b": 0},
+                title=(f"{len(view_nodes):,} most-asked tags and {len(view_edges):,} "
+                       "edges, at Gephi's positions"))
+            network.update_xaxes(visible=False)
+            network.update_yaxes(visible=False, scaleanchor="x")
+            st.plotly_chart(network)
+            if matched < len(layout):
+                st.caption(f"{matched:,} of the {len(layout):,} tags in the layout "
+                           "match the current stage 3 output.")
+
+    st.divider()
     top_n = st.slider("Tags to plot", 20, 150, 60, key="net")
     min_w = st.slider("Minimum edge weight", 5, 500, 50)
 

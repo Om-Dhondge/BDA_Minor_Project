@@ -101,3 +101,42 @@ def read_gephi_layout(path) -> pd.DataFrame:
         elif name == "edge":
             elem.clear()
     return pd.DataFrame(rows, columns=["tag", "x", "y", "size", "color"])
+
+
+def network_view(layout: pd.DataFrame, metrics: pd.DataFrame,
+                 edges: pd.DataFrame, top_n: int, per_tag: int,
+                 min_weight: int = MIN_WEIGHT):
+    """The tags and edges the Network tab draws.
+
+    Tags: the top_n by question_count among those Gephi placed and stage 3
+    knows; a stale layout's unknown ids drop out. Edges: each shown tag's
+    per_tag strongest edges to other shown tags. An edge is kept if it is in
+    either endpoint's top per_tag, so popular tags cannot crowd out the
+    rest: the 300 most-asked tags alone share 17,955 edges.
+    """
+    placed = layout.dropna(subset=["x", "y"]).merge(
+        metrics[["tag", "question_count", "tag_authority"]], on="tag")
+    nodes = (placed.sort_values(["question_count", "tag"], ascending=[False, True])
+             .head(top_n).reset_index(drop=True))
+    shown = set(nodes["tag"])
+    among = edges[(edges["weight"] >= min_weight)
+                  & edges["src"].isin(shown)
+                  & edges["dst"].isin(shown)].reset_index(drop=True)
+    ends = pd.concat([
+        pd.DataFrame({"end": among["src"], "edge": among.index, "weight": among["weight"]}),
+        pd.DataFrame({"end": among["dst"], "edge": among.index, "weight": among["weight"]}),
+    ])
+    best = (ends.sort_values(["end", "weight", "edge"], ascending=[True, False, True])
+            .groupby("end").head(per_tag))
+    kept = among.loc[sorted(set(best["edge"]))].reset_index(drop=True)
+    return nodes, kept
+
+
+def edge_segments(nodes: pd.DataFrame, edges: pd.DataFrame):
+    """x and y lists for one Plotly line trace: each edge, then a None break."""
+    position = nodes.set_index("tag")[["x", "y"]]
+    xs, ys = [], []
+    for src, dst in zip(edges["src"], edges["dst"]):
+        xs += [position.at[src, "x"], position.at[dst, "x"], None]
+        ys += [position.at[src, "y"], position.at[dst, "y"], None]
+    return xs, ys

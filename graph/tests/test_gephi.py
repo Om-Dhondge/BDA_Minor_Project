@@ -5,8 +5,10 @@ import pytest
 from lib.gephi import (
     MIN_WEIGHT,
     build_tag_graph,
+    edge_segments,
     louvain_clusters,
     missing_attributes,
+    network_view,
     read_gephi_layout,
 )
 
@@ -116,3 +118,49 @@ def test_min_weight_matches_primary_threshold():
     # lib.gephi keeps its own copy so the dashboard never imports Spark.
     from lib.algorithms import PRIMARY_THRESHOLD
     assert MIN_WEIGHT == PRIMARY_THRESHOLD
+
+
+def placed(tags, **overrides):
+    """A layout frame with every tag placed on a line."""
+    rows = [{"tag": t, "x": float(i), "y": float(-i), "size": 10.0, "color": "#112233"}
+            for i, t in enumerate(tags)]
+    for row in rows:
+        row.update(overrides.get(row["tag"], {}))
+    return pd.DataFrame(rows)
+
+
+def test_view_keeps_the_top_tags_by_question_count(metrics, edges):
+    nodes, _ = network_view(placed(metrics["tag"]), metrics, edges,
+                            top_n=3, per_tag=3)
+    assert list(nodes["tag"]) == ["python", "java", "c#"]
+
+
+def test_view_keeps_each_tags_strongest_edges(metrics, edges):
+    _, kept = network_view(placed(metrics["tag"]), metrics, edges,
+                           top_n=6, per_tag=1)
+    # java-python (6) is no endpoint's strongest; django-flask (9) neither.
+    assert set(zip(kept["src"], kept["dst"])) == {
+        ("django", "python"), ("flask", "python"), ("java", "spring")}
+
+
+def test_view_never_draws_an_edge_to_a_hidden_tag(metrics, edges):
+    nodes, kept = network_view(placed(metrics["tag"]), metrics, edges,
+                               top_n=2, per_tag=3)
+    shown = set(nodes["tag"])
+    assert shown == {"python", "java"}
+    assert set(kept["src"]) | set(kept["dst"]) <= shown
+    assert len(kept) == 1
+
+
+def test_view_skips_unplaced_and_unknown_tags(metrics, edges):
+    # A stale layout: "ruby" is not a current tag, and Gephi never placed "java".
+    layout = placed(["python", "java", "ruby"], java={"x": None, "y": None})
+    nodes, _ = network_view(layout, metrics, edges, top_n=10, per_tag=3)
+    assert list(nodes["tag"]) == ["python"]
+
+
+def test_edge_segments_break_between_edges():
+    nodes = placed(["a", "b", "c"])
+    xs, ys = edge_segments(nodes, pd.DataFrame({"src": ["a", "b"], "dst": ["b", "c"]}))
+    assert xs == [0.0, 1.0, None, 1.0, 2.0, None]
+    assert ys == [0.0, -1.0, None, -1.0, -2.0, None]
